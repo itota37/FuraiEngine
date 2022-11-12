@@ -1,0 +1,23 @@
+{
+    "configurations": [
+        {
+            "name": "Test Windows 64",
+            "includePath": [
+                "${workspaceFolder}/include/*"
+            ],
+            "defines": [
+                "FURAIENGINE_TEST",          // テストラン用ビルド箇所を識別するためのシンボルです。
+                "FURAIENGINE_CORE",          // FuraiEngineCoreを識別する為のシンボルです。
+                "_FURAIENGINE_CORE_DYANMIC", // 動的ライブラリを識別する為のシンボルです。
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "windowsSdkVersion": "10.0.19041.0",
+            "compilerPath": "${workspaceFolder}/../../Editor/Build/Windows/LLVM/bin/clang.exe",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "windows-clang-x64"
+        }
+    ],
+    "version": 4
+}
