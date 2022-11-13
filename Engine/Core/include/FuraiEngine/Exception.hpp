@@ -20,7 +20,7 @@ namespace FuraiEngine
     
         /// エラーメッセージを取得します。
         /// @return エラーメッセージです。
-        virtual const Char *message() noexcept = 0;
+        virtual const Char *message() const noexcept = 0;
     };
 }
 

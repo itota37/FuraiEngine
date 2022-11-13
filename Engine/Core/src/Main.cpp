@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include "FuraiEngine/Allocation.hpp"
+#include "FuraiEngine/String.hpp"
 
 using namespace FuraiEngine;
 

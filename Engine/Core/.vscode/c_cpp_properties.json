@@ -8,7 +8,6 @@
             "defines": [
                 "FURAIENGINE_TEST",          // テストラン用ビルド箇所を識別するためのシンボルです。
                 "FURAIENGINE_CORE",          // FuraiEngineCoreを識別する為のシンボルです。
-                "_FURAIENGINE_CORE_DYANMIC", // 動的ライブラリを識別する為のシンボルです。
                 "UNICODE",
                 "_UNICODE"
             ],
