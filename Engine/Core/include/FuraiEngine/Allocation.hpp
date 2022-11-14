@@ -12,7 +12,7 @@
 namespace FuraiEngine
 {
     /// メモリに関する例外です。
-    DYNAMIC_LINK class MemoryException: public IException
+    DYNAMIC_LINK_CORE class MemoryException: public IException
     {
     public:
         
@@ -63,7 +63,7 @@ namespace FuraiEngine
     };
 
     /// 固定長メモリプールです。
-    DYNAMIC_LINK class MemoryPool
+    DYNAMIC_LINK_CORE class MemoryPool
     {
         USize m_elementSize;       // 1要素のサイズです。sizeof(U8*)以上に矯正されます。
         USize m_elementCount;      // このプールが管理する要素の数です。1以上に矯正されます。
@@ -126,7 +126,7 @@ namespace FuraiEngine
     };
 
     /// 固定長メモリマネージャです。
-    DYNAMIC_LINK class FixedMemoryManager
+    DYNAMIC_LINK_CORE class FixedMemoryManager
     {
         USize m_elementSize;     // 1要素のサイズです。sizeof(U8*)以上に矯正されます。
         USize m_elementCount;    // 1プールが管理する要素の数です。1以上に矯正されます。
@@ -182,7 +182,7 @@ namespace FuraiEngine
     };
 
     /// 可変長メモリマネージャです。
-    DYNAMIC_LINK class DynamicMemoryManager
+    DYNAMIC_LINK_CORE class DynamicMemoryManager
     {
         static constexpr USize SIZE16 = 16;
         static constexpr USize SIZE32 = 32;
@@ -276,7 +276,7 @@ namespace FuraiEngine
     };
 
     /// グローバルメモリメモリマネージャです。
-    DYNAMIC_LINK class GlobalMemoryManager
+    DYNAMIC_LINK_CORE class GlobalMemoryManager
     {
     public:
 
@@ -393,21 +393,21 @@ namespace FuraiEngine
         {}
 
         /// メモリを確保します。
-        /// @param size 確保するメモリのサイズです。
-        /// @return 確保したメモリのポインタです。
+        /// @param count 確保する要素数です。
+        /// @return sizeof(T)*countで確保したメモリのポインタです。
         /// @exception MemoryException メモリプールの確保に失敗する可能性があります。
-        T *allocate(USize size)
+        T *allocate(USize count)
         {
-            return reinterpret_cast<T*>(GlobalMemoryManager::allocate(size));
+            return reinterpret_cast<T*>(GlobalMemoryManager::allocate(sizeof(T) * count));
         }
 
         /// メモリを解放します。
         /// @param pointer 解放するメモリのポインタです。
-        /// @param size 解放するメモリのサイズです。
+        /// @param count 解放するメモリの要素数です。
         /// @exception MemoryException メモリプールの確保に失敗する可能性があります。
-        void deallocate(T *pointer, USize size)
+        void deallocate(T *pointer, USize count)
         {
-            GlobalMemoryManager::deallocate(reinterpret_cast<void*>(pointer), size);
+            GlobalMemoryManager::deallocate(reinterpret_cast<void*>(pointer), sizeof(T) * count);
         }
     };
 

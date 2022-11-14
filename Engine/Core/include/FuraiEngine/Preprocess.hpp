@@ -17,16 +17,15 @@
 #define DLL_IMPORT 
 #endif
 
+/// 外部呼び出しの為のキーワードを付加します。
+#define DYNAMIC_CALL extern "C" DLL_EXPORT
+
 #ifdef FURAIENGINE_CORE
-/// 動的リンクの為のキーワードを付加します。
-#define DYNAMIC_LINK DLL_EXPORT
-/// 動的ロードの為のキーワードを付加します。
-#define DYNAMIC_LOAD extern "C" DLL_EXPORT
+/// コアモジュールの動的リンクの為のキーワードを付加します。
+#define DYNAMIC_LINK_CORE DLL_EXPORT
 #else
-/// 動的リンクの為のキーワードを付加します。
-#define DYNAMIC_LINK DLL_IMPORT
-/// 動的ロードの為のキーワードを付加します。
-#define DYNAMIC_LOAD extern "C" DLL_IMPORT
+/// コアモジュールの動的リンクの為のキーワードを付加します。
+#define DYNAMIC_LINK_CORE DLL_IMPORT
 #endif 
 
 #endif // !_FURAIENGINE_PREPROCESS_HPP

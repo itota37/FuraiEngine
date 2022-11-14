@@ -9,7 +9,6 @@
 #include "FuraiEngine/Primitive.hpp"
 #include "FuraiEngine/Exception.hpp"
 
-
 /// FuraiEngineの機能を提供する名前空間です。
 namespace FuraiEngine
 {
@@ -53,7 +52,9 @@ namespace FuraiEngine
         /// @param origin ムーブ元です。
         PointerIterator(PointerIterator<T> &&origin) noexcept
         : m_element(origin.m_element)
-        {}
+        {
+            origin.m_element = nullptr;
+        }
 
         /// コピー代入します。
         /// @param origin コピー元です。
@@ -68,6 +69,7 @@ namespace FuraiEngine
         PointerIterator<T>& operator=(PointerIterator<T> &&origin) noexcept
         {
             this->m_element = origin.m_element;
+            origin.m_element = nullptr;
             return *this;
         }
 
@@ -167,7 +169,9 @@ namespace FuraiEngine
         /// @param origin ムーブ元です。
         ConstPointerIterator(ConstPointerIterator<T> &&origin) noexcept
         : m_element(origin.m_element)
-        {}
+        {
+            origin.m_element = nullptr;
+        }
 
         /// コピー代入します。
         /// @param origin コピー元です。
@@ -182,6 +186,7 @@ namespace FuraiEngine
         ConstPointerIterator<T>& operator=(ConstPointerIterator<T> &&origin) noexcept
         {
             this->m_element = origin.m_element;
+            origin.m_element = nullptr;
             return *this;
         }
 
@@ -239,7 +244,7 @@ namespace FuraiEngine
     };
 
     /// 標準文字列型です。
-    DYNAMIC_LINK class String
+    DYNAMIC_LINK_CORE class String
     {
         USize m_length; // 文字列の長さです。
         USize m_hash;   // 文字列のハッシュ値です。
@@ -342,7 +347,7 @@ namespace FuraiEngine
     };
 
     /// 参照がnullptrの場合の例外です。
-    DYNAMIC_LINK class NullReferenceException: public IException
+    DYNAMIC_LINK_CORE class NullReferenceException: public IException
     {
         String m_message;
 
