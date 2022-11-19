@@ -15,6 +15,8 @@
 namespace FuraiEngine
 {
     /// 標準配列です。
+    /// @tparam T 要素の型です。
+    /// @tparam A アロケータの型です。
     template<typename T, typename A = Allocator<T>>
     class Array
     {

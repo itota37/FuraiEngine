@@ -128,6 +128,22 @@ namespace FuraiEngine
         /// 要素にアクセスします。
         /// @exception NullRefarenceException 要素がnullptrの可能性があります。
         const T &operator*() const;
+
+        /// 要素が同等か比較します。
+        /// @param other 比較対象です。
+        /// @return 同等の場合、真です。
+        Bool operator==(const PointerIterator<T> &other) const noexcept
+        {
+            return l.m_element == r.m_element;
+        }
+
+        /// 要素が不等か比較します。
+        /// @param other 比較対象です。
+        /// @return 不等の場合、真です。
+        Bool operator!=(const PointerIterator<T> &other) const noexcept
+        {
+            return l.m_element != r.m_element;
+        }
     };
 
     /// 不変ポインタイテレータです。
@@ -241,6 +257,22 @@ namespace FuraiEngine
         /// 要素にアクセスします。
         /// @exception NullRefarenceException 要素がnullptrの可能性があります。
         const T &operator*() const;
+
+        /// 要素が同等か比較します。
+        /// @param other 比較対象です。
+        /// @return 同等の場合、真です。
+        Bool operator==(const ConstPointerIterator<T> &other) const noexcept
+        {
+            return l.m_element == r.m_element;
+        }
+
+        /// 要素が不等か比較します。
+        /// @param other 比較対象です。
+        /// @return 不等の場合、真です。
+        Bool operator!=(const ConstPointerIterator<T> &other) const noexcept
+        {
+            return l.m_element != r.m_element;
+        }
     };
 
     /// 標準文字列型です。
@@ -312,10 +344,6 @@ namespace FuraiEngine
         /// 文字列の長さを取得します。
         /// @return 文字列の長さです。 @n UTF-8の為、文字数ではないことに注意してください。
         USize length() const noexcept;
-
-        /// 文字列のハッシュ値を取得します。
-        /// @return 文字列のハッシュ値です。
-        USize hash() const noexcept;
 
         /// 生文字列を取得します。
         /// @return 生文字列です。

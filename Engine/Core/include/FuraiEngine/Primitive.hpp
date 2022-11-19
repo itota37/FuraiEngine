@@ -68,7 +68,7 @@ namespace FuraiEngine
     constexpr U8 U8_MIN = std::numeric_limits<U8>::min();
     
     /// U8型の最大値です。
-    constexpr U8 I8_MAX = std::numeric_limits<U8>::max();
+    constexpr U8 U8_MAX = std::numeric_limits<U8>::max();
 
     /// I16型の最小値です。
     constexpr I16 I16_MIN = std::numeric_limits<I16>::min();
@@ -80,7 +80,7 @@ namespace FuraiEngine
     constexpr U16 U16_MIN = std::numeric_limits<U16>::min();
     
     /// U16型の最大値です。
-    constexpr U16 I16_MAX = std::numeric_limits<U16>::max();
+    constexpr U16 U16_MAX = std::numeric_limits<U16>::max();
 
     /// I32型の最小値です。
     constexpr I32 I32_MIN = std::numeric_limits<I32>::min();
@@ -92,7 +92,7 @@ namespace FuraiEngine
     constexpr U32 U32_MIN = std::numeric_limits<U32>::min();
     
     /// U32型の最大値です。
-    constexpr U32 I32_MAX = std::numeric_limits<U32>::max();
+    constexpr U32 U32_MAX = std::numeric_limits<U32>::max();
 
     /// I64型の最小値です。
     constexpr I64 I64_MIN = std::numeric_limits<I64>::min();
@@ -104,7 +104,7 @@ namespace FuraiEngine
     constexpr U64 U64_MIN = std::numeric_limits<U64>::min();
     
     /// U64型の最大値です。
-    constexpr U64 I64_MAX = std::numeric_limits<U64>::max();
+    constexpr U64 U64_MAX = std::numeric_limits<U64>::max();
 
     /// F32型の誤差値です。
     constexpr F32 F32_EPSILON = std::numeric_limits<F32>::epsilon();
@@ -123,6 +123,18 @@ namespace FuraiEngine
     
     /// F64型の負の無限大です。
     constexpr F64 F64_NEGATIVE_INFINITY = -F64_INFINITY;
+
+    /// ISize型の最小値です。
+    constexpr ISize ISIZE_MIN = std::numeric_limits<ISize>::min();
+    
+    /// ISize型の最大値です。
+    constexpr ISize ISIZE_MAX = std::numeric_limits<ISize>::max();
+
+    /// USize型の最小値です。
+    constexpr USize USIZE_MIN = std::numeric_limits<USize>::min();
+    
+    /// USize型の最大値です。
+    constexpr USize USIZE_MAX = std::numeric_limits<USize>::max();
 
     /// 誤差を考慮して等しいか比較します。
     /// @param l 比較対象です。
