@@ -109,14 +109,15 @@ template<> struct HashOf<T> {                          \
     /// @tparam T 要素の型です。
     /// @tparam H ハッシュ関数オブジェクトの型です。
     /// @tparam E 同等比較関数オブジェクトの型です。
-    /// @tparam A アロケータの型です。
-    template<typename T, typename H = HashOf<T>, typename E = EqualOf<T>, typename A = Allocator<T>>
+    /// @tparam TA 要素配列用アロケータの型です。
+    /// @tparam IA インデックス配列用アロケータです。
+    template<typename T, typename H = HashOf<T>, typename E = EqualOf<T>, typename TA = Allocator<T>, typename IA = Allocator<USize>>
     class Set
     {
         constexpr F32 THRESHOLD = 0.8f; // 全体の何割が埋まったら拡張するかを表す閾値です。
 
-        Array<T, A> m_elements;         // 要素配列です。
-        Array<USize, A> m_indices;      // 添え字配列です。
+        Array<T, TA> m_elements;        // 要素配列です。
+        Array<USize, IA> m_indices;     // 添え字配列です。
         H m_hashOf;                     // ハッシュ関数オブジェクトです。
         E m_equalOf;                    // 同等比較関数オブジェクトです。
 
@@ -153,7 +154,29 @@ template<> struct HashOf<T> {                          \
         }
 
         /// ハッシュ値と値から位置の場所を取得します。
-        
+        /// @param hash ハッシュ値です。
+        /// @param value 比較する値です。
+        /// @return 位置のインデックスです。
+        /// @retval USIZE_MAX 見つかりませんでした。
+        USize positionIndexOf(USize hash, const T &value) const noexcept
+        {
+            auto index = this->indexByHash(hash);
+            for (USize i = index; i < this->m_indices.count(); i++)
+            {
+                if (this->m_equalOf(value, this->m_elements[this->m_indices[i]]))
+                {
+                    return i;
+                }
+            }
+            for (USize i = 0; i < index; i++)
+            {
+                if (this->m_equalOf(value, this->m_elements[this->m_indices[i]]))
+                {
+                    return i;
+                }
+            }
+            return USIZE_MAX;
+        }
 
         /// 挿入幅を2倍に拡張します。
         /// @exception MemoryException メモリの確保に失敗する可能性があります。
@@ -225,11 +248,17 @@ template<> struct HashOf<T> {                          \
         void removeByHash(USize hash, const T &value)
         {
             // 削除します。
-
-            // 半減値の閾値を下回っていた場合、位置配列を縮小します。
-            if (this->m_elements.count() < this->m_indices.count() * 0.5f * this->THRESHOLD)
+            auto index = this->positionIndexOf(hash, value);
+            if (index != USIZE_MAX)
             {
-                this->reducedIndices();
+                this->m_elements.removeAt(this->m_indices[index]);
+                this->m_indices.removeAt(index);
+
+                // 半減値の閾値を下回っていた場合、位置配列を縮小します。
+                if (this->m_elements.count() < this->m_indices.count() * 0.5f * this->THRESHOLD)
+                {
+                    this->reducedIndices();
+                }
             }
         }
 
@@ -239,10 +268,18 @@ template<> struct HashOf<T> {                          \
         /// @param length 初期の配列長です。
         /// @param hashOf ハッシュ関数オブジェクトです。
         /// @param equalOf 同等比較関数オブジェクトです。
-        /// @param allocator アロケータです。
+        /// @param elementsAllocator 要素配列用アロケータです。
+        /// @param indicesAllocator インデックス配列用アロケータです。
         /// @exception MemoryException メモリの確保に失敗する可能性があります。
-        Set(USize length, const H &hashOf = H(), const E &equalOf = E(), const A &allocator = A())
-        : m_elements(length, allocator)
+        Set(
+            USize length, 
+            const H &hashOf = H(), 
+            const E &equalOf = E(), 
+            const TA &elementsAllocator = TA(), 
+            const IA &indicesAllocator = IA()
+        )
+        : m_elements(length, elementsAllocator)
+        , m_indices((length < 8 ? 8 : length) * 2, indicesAllocator)
         , m_hashOf(hashOf)
         , m_equalOf(equalOf)
         {}
@@ -250,22 +287,173 @@ template<> struct HashOf<T> {                          \
         /// 空の配列で初期化します。
         /// @param hashOf ハッシュ関数オブジェクトです。
         /// @param equalOf 同等比較関数オブジェクトです。
-        /// @param allocator アロケータです。
+        /// @param elementsAllocator 要素配列用アロケータです。
+        /// @param indicesAllocator インデックス配列用アロケータです。
         /// @exception MemoryException メモリの確保に失敗する可能性があります。
-        Set(const H &hashOf = H(), const E &equalOf = E(), const A &allocator = A())
-        : Set(0, hashOf, allocator)
+        Set(
+            const H &hashOf = H(), 
+            const E &equalOf = E(), 
+            const TA &elementsAllocator = TA(), 
+            const IA &indicesAllocator = IA()
+        )
+        : Set(0, hashOf, equalOf, elementsAllocator, indicesAllocator)
         {}
 
         /// 初期要素を指定して初期化します。
         /// @param list 初期化リストです。
         /// @param hashOf ハッシュ関数オブジェクトです。
         /// @param equalOf 同等比較関数オブジェクトです。
-        /// @param allocator アロケータです。
+        /// @param elementsAllocator 要素配列用アロケータです。
+        /// @param indicesAllocator インデックス配列用アロケータです。
         /// @exception MemoryException メモリの確保に失敗する可能性があります。
-        Set(std::initializer_list<T> &list, const H &hashOf = H(), const E &equalOf = E(), const A &allocator = A())
-        : m_elements(list.size() * 2, allocator)
+        Set(
+            std::initializer_list<T> &list, 
+            const H &hashOf = H(), 
+            const E &equalOf = E(), 
+            const TA &elementsAllocator = TA(), 
+            const IA &indicesAllocator = IA()
+        )
+        : m_elements(list , elementsAllocator)
+        , m_indices((list.size() < 8 ? 8 : list.size()) * 2, indicesAllocator)
         , m_hashOf(hashOf)
-        {}
+        , m_equalOf(equalOf)
+        {
+            for(auto elem: this->m_elements)
+            {
+                auto hash = this->m_hashOf(elem);
+                this->insertByHash(hash, elem);
+            }
+        }
+
+        /// コピー代入します。
+        /// @param origin コピー代入元です。
+        /// @exception MemoryException メモリの確保に失敗する可能性があります。
+        Set<T, H, E, TA, IA> &operator=(const Set<T, H, E, TA, IA> &origin)
+        {
+            this->m_elements = origin.m_elements;
+            this->m_indices = origin.m_indices;
+            this->m_hashOf = origin.m_hashOf;
+            this->m_equalOf = origin.m_equalOf;
+            return *this;
+        }
+
+        
+        /// ムーブ代入します。
+        /// @param origin ムーブ代入元です。
+        Set<T, H, E, TA, IA> &operator=(Set<T, H, E, TA, IA> &&origin) noexcept
+        {
+            // 自身をムーブしていない場合に実行します。
+            if (this != &origin)
+            {
+                this->m_elements = std::move(origin.m_elements);
+                this->m_indices = std::move(origin.m_indices);
+                this->m_hashOf = std::move(origin.m_hashOf);
+                this->m_equalOf = std::move(origin.m_equalOf);
+            }
+            return *this;
+        }
+
+        /// コピーします。
+        /// @param origin コピー元です。
+        /// @exception MemoryException メモリの確保に失敗する可能性があります。
+        Set(const Set<T, H, E, TA, IA> &origin)
+        {
+            *this = origin;
+        }
+
+        /// ムーブします。
+        /// @param origin ムーブ元です。
+        Set(Set<T, H, E, TA, IA> &&origin) noexcept
+        {
+            *this = std::move(origin);
+        }
+
+        /// 要素を追加します。
+        /// @param value 追加する要素です。
+        /// @exception MemoryException メモリの確保に失敗する可能性があります。
+        void add(const T &value)
+        {
+            auto hash = this->m_hashOf(value);
+            this->insertByHash(hash, value);
+        }
+
+        /// 要素を追加します。
+        /// @param value 追加する要素です。
+        /// @exception MemoryException メモリの確保に失敗する可能性があります。
+        void add(T &&value)
+        {
+            auto hash = this->m_hashOf(value);
+            this->insertByHash(hash, value);
+        }
+
+        /// 要素を削除します。
+        /// @param value 削除する要素です。
+        /// @exception MemoryException メモリの確保に失敗する可能性があります。
+        void remove(const T &value)
+        {
+            auto hash = this->m_hashOf(value);
+            this->removeByHash(hash, value);
+        }
+
+        /// 要素を削除します。
+        /// @param value 削除する要素です。
+        /// @exception MemoryException メモリの確保に失敗する可能性があります。
+        void remove(T &&value)
+        {
+            auto hash = this->m_hashOf(value);
+            this->removeByHash(hash, value);
+        }
+
+        /// 要素が含まれているか判定します。
+        /// @param value 判定する要素です。
+        Bool contains(const T &value) const noexcept 
+        {
+            auto hash = this->m_hashOf(value);
+            return USIZE_MAX != this->positionIndexOf(hash, value);
+        }
+
+        /// 要素が含まれているか判定します。
+        /// @param value 判定する要素です。
+        Bool contains(T &&value) const noexcept 
+        {
+            auto hash = this->m_hashOf(value);
+            return USIZE_MAX != this->positionIndexOf(hash, value);
+        }
+
+        /// 要素数を取得します。
+        /// @return 要素数です。
+        USize count() const noexcept
+        {
+            return this->m_elements.count();
+        }
+
+        /// 先頭の可変イテレータを取得します。
+        /// @return 先頭イテレータです。
+        PointerIterator<T> begin() noexcept
+        {
+            return this->m_elements.begin();
+        }
+
+        /// 先頭の不変イテレータを取得します。
+        /// @return 先頭イテレータです。
+        ConstPointerIterator<T> begin() const noexcept
+        {
+            return this->m_elements.begin();
+        }
+        
+        /// 番兵の可変イテレータを取得します。
+        /// @return 番兵イテレータです。
+        PointerIterator<T> end() noexcept
+        {
+            return this->m_elements.end();
+        }
+        
+        /// 番兵の不変イテレータを取得します。
+        /// @return 番兵イテレータです。
+        ConstPointerIterator<T> end() const noexcept
+        {
+            return this->m_elements.end();
+        }
     };
 }
 #endif // !_FURAIENGINE_SET_HPP

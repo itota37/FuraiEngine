@@ -186,7 +186,10 @@ namespace FuraiEngine
         /// 解体します。
         ~Array()
         {
-            this->m_allocator.deallocate(this->m_buffer, this->m_length);
+            if (this->m_buffer)
+            {
+                this->m_allocator.deallocate(this->m_buffer, this->m_length);
+            }
         }
 
         /// 添え字からアクセスします。
@@ -378,14 +381,14 @@ namespace FuraiEngine
         
         /// 番兵の可変イテレータを取得します。
         /// @return 番兵イテレータです。
-        PointerIterator<T> begin() noexcept
+        PointerIterator<T> end() noexcept
         {
             return PointerIterator<T>(&this->m_buffer[this->m_count]);
         }
         
         /// 番兵の不変イテレータを取得します。
         /// @return 番兵イテレータです。
-        ConstPointerIterator<T> begin() const noexcept
+        ConstPointerIterator<T> end() const noexcept
         {
             return ConstPointerIterator<T>(&this->m_buffer[this->m_count]);
         }
