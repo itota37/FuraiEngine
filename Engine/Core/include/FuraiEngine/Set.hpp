@@ -70,7 +70,7 @@ template<> struct HashOf<T> {                          \
     HASH_OF(F32); HASH_OF(F64);
     HASH_OF(Bool); HASH_OF(Char);
 
-    /// @code FURAIDOC_INTERNAL
+    /// @cond FURAIDOC_INTERNAL
     /// ハッシュ関数オブジェクトのString特殊化構造体です。
     template<>
     struct HashOf<String>
@@ -88,7 +88,7 @@ template<> struct HashOf<T> {                          \
             return hash;
         }
     };
-    /// @endcode
+    /// @endcond
 
     /// 等価関数オブジェクトの特殊化構造体です。
     /// @tparam T 比較する値の型です。
