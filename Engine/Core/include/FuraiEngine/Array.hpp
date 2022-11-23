@@ -128,7 +128,7 @@ namespace FuraiEngine
         /// コピー代入します。
         /// @param origin コピー元です。
         /// @exception MemoryException メモリの確保に失敗する可能性があります。
-        Array<T> &operator=(const Array<T> &origin)
+        Array<T, A> &operator=(const Array<T, A> &origin)
         {
             // 元データを削除します。
             this->m_allocator.deallocate(this->m_buffer, this->m_length);
@@ -146,7 +146,7 @@ namespace FuraiEngine
 
         /// ムーブ代入します。
         /// @param origin ムーブ元です。
-        Array<T> &operator=(Array<T> &&origin) noexcept
+        Array<T, A> &operator=(Array<T, A> &&origin) noexcept
         {
             // 自身をムーブしていない場合に実行します。
             if (this != &origin)
@@ -171,14 +171,14 @@ namespace FuraiEngine
         /// コピーします。
         /// @param origin コピー元です。
         /// @exception MemoryException メモリの確保に失敗する可能性があります。
-        Array(const Array<T> &origin)
+        Array(const Array<T, A> &origin)
         {
             *this = origin;
         }
 
         /// ムーブします。
         /// @param origin ムーブ元です。
-        Array(Array<T> &&origin) noexcept
+        Array(Array<T, A> &&origin) noexcept
         {
             *this = std::move(origin);
         }
@@ -235,7 +235,7 @@ namespace FuraiEngine
         /// 末尾に要素を追加します。
         /// @param value 追加要素です。
         /// @exception MemoryException メモリの確保に失敗する可能性があります。
-        void add(const T &value)
+        void push(const T &value)
         {
             // 配列長と要素数が一致した場合、バッファを拡張します。
             if (this->m_count == this->m_length)
@@ -251,7 +251,7 @@ namespace FuraiEngine
         /// 末尾に要素を追加します。
         /// @param value 追加要素です。
         /// @exception MemoryException メモリの確保に失敗する可能性があります。
-        void add(T &&value)
+        void push(T &&value)
         {
             // 配列長と要素数が一致した場合、バッファを拡張します。
             if (this->m_count == this->m_length)
@@ -333,17 +333,17 @@ namespace FuraiEngine
         /// @param value 捜索対象の要素です。
         /// @param equal 等価を比較する関数です。
         /// @return はじめに見つかった要素の位置です。
-        /// @retval -1 見つかりませんでした。
-        ISize indexOf(const T &value, const Func<Bool(const T &, const T &)> &equal = [](const T &l, const T &r){ return l == r; }) const noexcept
+        /// @retval USIZE_MAX 見つかりませんでした。
+        USize indexOf(const T &value, const Func<Bool(const T &, const T &)> &equal = [](const T &l, const T &r){ return l == r; }) const noexcept
         {
             for (USize i = 0; i < this->m_count; i++)
             {
                 if (equal(value, this->m_buffer[i]))
                 {
-                    return static_cast<ISize>(i);
+                    return i;
                 }
             }
-            return -1;
+            return USIZE_MAX;
         }
 
         /// 指定要素を削除します。
@@ -351,10 +351,29 @@ namespace FuraiEngine
         /// @exception MemoryException メモリの確保に失敗する可能性があります。
         void remove(const T &value)
         {
-            ISize index = this->indexOf(value);
-            if (index != -1)
+            auto index = this->indexOf(value);
+            if (index != USIZE_MAX)
             {
                 this->removeAt(static_cast<USize>(index));
+            }
+        }
+
+        /// 末尾から要素を取り出します。
+        /// @return 取り出した要素です。
+        /// @exception NullReferenceException 要素数が0の可能性があります。
+        /// @exception MemoryException メモリの確保に失敗する可能性があります。
+        T &pop()
+        {
+            auto index = this->m_count;
+            if (index != 0)
+            {
+                auto elem = this->m_buffer[index - 1];
+                this->removeAt(index - 1);
+                return elem;
+            }
+            else
+            {
+                throw NullReferenceException("要素数が0です。");
             }
         }
 
