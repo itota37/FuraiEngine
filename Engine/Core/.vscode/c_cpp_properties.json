@@ -3,7 +3,8 @@
         {
             "name": "Test Windows 64",
             "includePath": [
-                "${workspaceFolder}/include/*"
+                "${workspaceFolder}/include/*",
+                "${workspaceFolder}/src/*"
             ],
             "defines": [
                 "FURAIENGINE_TEST",          // テストラン用ビルド箇所を識別するためのシンボルです。

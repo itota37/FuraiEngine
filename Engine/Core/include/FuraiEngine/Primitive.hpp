@@ -1,16 +1,17 @@
 /// @file FuraiEngine/Primitive.hpp
 /// @copyright (C) 2022 FuraiEngineCommunity.
-/// @author Taichi Ito
-/// 標準型を提供します。
+/// @author Taichi Ito.
+/// 基本型を提供します。
 #ifndef _FURAIENGINE_PRIMITIVE_HPP
 #define _FURAIENGINE_PRIMITIVE_HPP
 
 #include <limits>
 #include "FuraiEngine/Preprocess.hpp"
 
-/// FuraiEngineの機能を提供する名前空間です。
+/// FuraiEngineのすべての機能を含む名前空間です。
 namespace FuraiEngine
 {
+
     /// 符号付き8ビット整数型の型エイリアスです。
     using I8 = signed char;
 
@@ -141,7 +142,7 @@ namespace FuraiEngine
     /// @param r 比較対象です。
     /// @retval true 差が誤差の範囲内です。
     /// @retval false 差が誤差の範囲外です。
-    inline Bool equal(F32 l, F32 r)
+    inline Bool Approximately(F32 l, F32 r) noexcept
     {
         return fabsf(l - r) <= F32_EPSILON * fmaxf(1.0f, fmaxf(fabsf(l), fabsf(r)));
     }
@@ -151,14 +152,11 @@ namespace FuraiEngine
     /// @param r 比較対象です。
     /// @retval true 差が誤差の範囲内です。
     /// @retval false 差が誤差の範囲外です。
-    inline Bool equal(F64 l, F64 r)
+    inline Bool Approximately(F64 l, F64 r) noexcept
     {
         return fabs(l - r) <= F64_EPSILON * fmax(1.0, fmax(fabs(l), fabs(r)));
     }
 
 }
-
-/// 標準文字列にエンコードします。
-#define TXT(T) u8##T
 
 #endif // !_FURAIENGINE_PRIMITIVE_HPP
