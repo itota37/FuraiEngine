@@ -1,0 +1,242 @@
+# FuraiEngineCodeStyle
+
+# ベーススタイルです。
+BasedOnStyle: WebKit
+# アクセス修飾子はインデントしません。(インデント=4)
+AccessModifierOffset: -4
+# 引数が折り返したとき、開始括弧の後ろの位置で揃えます。
+AlignAfterOpenBracket: Align
+# 構造体の初期化リストで、各メンバの初期値を左揃えます。
+AlignArrayOfStructures: Left
+# 連続した代入演算子は揃えます。
+AlignConsecutiveAssignments: Consecutive
+# 連続したビットフィールドは揃えます。
+AlignConsecutiveBitFields: Consecutive
+# 連続した宣言は揃えます。
+AlignConsecutiveDeclarations: Consecutive
+# 連続したマクロは揃えます。
+AlignConsecutiveMacros: Consecutive
+# マクロの改行エスケープ文字はできるだけ左揃えします。
+AlignEscapedNewlines: Left
+# 複数項演算子の折り返しは、演算子先頭で要素部分でそろえます。
+AlignOperands: AlignAfterOperator
+# 連続する末尾コメントは揃えます。
+AlignTrailingComments: true
+# 関数呼び出しで、引数を折り返す場合揃えます。
+AllowAllArgumentsOnNextLine: false
+# 関数宣言で、引数を折り返す場合揃えます。
+AllowAllParametersOfDeclarationOnNextLine: false
+# 短いブロックでも1行にまとめません。
+AllowShortBlocksOnASingleLine: Never
+# 短いcaseでも1行にまとめません。
+AllowShortCaseLabelsOnASingleLine: false
+# 短い列挙でも1行にまとめません。
+AllowShortEnumsOnASingleLine: false
+# 短い関数でも1行にまとめません。
+AllowShortFunctionsOnASingleLine: None
+# 短いif文でも1行にまとめません。
+AllowShortIfStatementsOnASingleLine: Never
+# 短いラムダ式でも1行にまとめません。
+AllowShortLambdasOnASingleLine: None
+# 短いwhile文でも1行にまとめません。
+AllowShortLoopsOnASingleLine: false
+# 戻り値の折り返しません。
+AlwaysBreakAfterReturnType:  None
+# 複数行の文字列リテラルの代入演算子の後に折り返します。
+AlwaysBreakBeforeMultilineStrings: true
+# テンプレートの後で折り返します。
+AlwaysBreakTemplateDeclarations: Yes
+# 関数呼び出し時の引数はすべて1行か引数1つづつで複数行です。
+BinPackArguments: false
+# 関数宣言時の引数はすべて1行か引数1つづつで複数行です。
+BinPackParameters: false
+# ビットフィールドのコロンの後ろに空白を入れます。
+BitFieldColonSpacing: After
+# 
+BreakBeforeBinaryOperators: NonAssignment
+#
+BreakBeforeBraces: Allman
+#
+BreakBeforeConceptDeclarations: true
+#
+BreakBeforeTernaryOperators: false
+#
+BreakConstructorInitializers: BeforeComma
+#
+BreakInheritanceList: BeforeComma
+#
+BreakStringLiterals: true
+#
+ColumnLimit: 60
+#
+CommentPragmas: ^@
+#
+CompactNamespaces: false
+#
+ConstructorInitializerIndentWidth: 4
+#
+ContinuationIndentWidth: 4
+#
+Cpp11BracedListStyle: false
+#
+DeriveLineEnding: true
+#
+DerivePointerAlignment: true
+#
+DisableFormat: false
+# アクセス修飾子の下は1行開けません。
+EmptyLineAfterAccessModifier: Never
+# アクセス修飾子の上に1行追加します。
+EmptyLineBeforeAccessModifier: Always
+#
+FixNamespaceComments: false
+#
+IncludeBlocks: Preserve
+#
+IndentAccessModifiers: false
+#
+IndentCaseBlocks: true
+#
+IndentCaseLabels: false
+#
+IndentExternBlock: AfterExternBlock
+#
+IndentGotoLabels: false
+#
+IndentPPDirectives: None
+#
+IndentRequires: false
+#
+IndentWidth: 4
+#
+IndentWrappedFunctionNames: false
+#
+KeepEmptyLinesAtTheStartOfBlocks: true
+#
+LambdaBodyIndentation: Signature
+#
+Language: Cpp
+#
+MaxEmptyLinesToKeep: 0
+#
+NamespaceIndentation: All
+#
+PPIndentWidth: 0
+#
+PackConstructorInitializers: NextLine
+#
+PenaltyBreakAssignment: 0
+#
+PenaltyBreakBeforeFirstCallParameter: 10
+#
+PenaltyBreakComment: 10
+#
+PenaltyBreakFirstLessLess: 10
+#
+PenaltyBreakString: 10
+#
+PenaltyBreakTemplateDeclaration: 0
+#
+PenaltyExcessCharacter: 1
+#
+PenaltyIndentedWhitespace: 1
+#
+PenaltyReturnTypeOnItsOwnLine: 0
+#
+PointerAlignment: Right
+#
+ReferenceAlignment: Pointer
+#
+ReflowComments: false
+#
+ShortNamespaceLines: 30
+#
+SortIncludes: CaseSensitive
+#
+SortUsingDeclarations: true
+#
+SpaceAfterCStyleCast: true
+#
+SpaceAfterLogicalNot: false
+#
+SpaceAfterTemplateKeyword: false
+#
+SpaceAroundPointerQualifiers: Default
+#
+SpaceBeforeAssignmentOperators: true
+#
+SpaceBeforeCaseColon: false
+#
+SpaceBeforeCpp11BracedList: true
+#
+SpaceBeforeCtorInitializerColon: false
+#
+SpaceBeforeInheritanceColon: false
+#
+SpaceBeforeParens: ControlStatements
+#
+SpaceBeforeRangeBasedForLoopColon: false
+#
+SpaceBeforeSquareBrackets: false
+#
+SpaceInEmptyBlock: false
+#
+SpaceInEmptyParentheses: false
+#
+SpacesBeforeTrailingComments: 1
+#
+SpacesInAngles: Never
+#
+SpacesInCStyleCastParentheses: false
+#
+SpacesInConditionalStatement: false
+#
+SpacesInParentheses: false
+#
+SpacesInSquareBrackets: false
+# C++17用の設定
+Standard: c++17
+# タブは空白4つ分
+TabWidth: 4
+# 折り返しは'\n'を使用
+UseCRLF: false
+# タブは常に空白に置換される
+UseTab: Never
+#
+BreakBeforeBraces: Custom
+#
+BraceWrapping:
+  # caseの後の波括弧は折り返します。
+  AfterCaseLabel: true
+  # クラス名の後の波括弧は折り返します。
+  AfterClass: false
+  # 制御構文の後の波括弧は折り返します。
+  AfterControlStatement: Always
+  # 列挙体名の後の波括弧は折り返します。
+  AfterEnum: true
+  # 関数名の後の波括弧は折り返します。
+  AfterFunction: true
+  # 名前空間名の後の波括弧は折り返します。
+  AfterNamespace: true
+  # 構造体名の後の波括弧は折り返します。
+  AfterStruct: true
+  # 共用体名の後の波括弧は折り返します。
+  AfterUnion: true
+  # externの後の波括弧は折り返します。
+  AfterExternBlock: true
+  # catchの前で折り返します。
+  BeforeCatch: true
+  # elseの前で折り返します。
+  BeforeElse: true
+  # ラムダ式の波括弧は折り返します。
+  BeforeLambdaBody: true
+  # do-whileのwhileの前で折り返します。
+  BeforeWhile: true
+  # 折り返した波括弧にインデントは挿入しません。
+  IndentBraces: false
+  # 空の関数の波括弧は1行にまとめます。
+  SplitEmptyFunction: false
+  # 空のクラス、構造体、共用体の波括弧は1行にまとめます。
+  SplitEmptyRecord: false
+  # 空の名前空間の波括弧は1行にまとめます。
+  SplitEmptyNamespace: false
