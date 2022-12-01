@@ -52,105 +52,105 @@ BinPackArguments: false
 BinPackParameters: false
 # ビットフィールドのコロンの後ろに空白を入れます。
 BitFieldColonSpacing: After
-# 
-BreakBeforeBinaryOperators: NonAssignment
-#
+# 折り返す場合、2項演算子の前で折り返します。
+BreakBeforeBinaryOperators: All
+# 波括弧の前で折り返します。
 BreakBeforeBraces: Allman
-#
+# コンセプトの前で折り返します。(C++20拡張時に適用されます。)
 BreakBeforeConceptDeclarations: true
-#
+# 三項演算子の前で折り返しません。
 BreakBeforeTernaryOperators: false
-#
+# 初期化子リストが折り返された場合、コロンの前で折り返します。
 BreakConstructorInitializers: BeforeComma
-#
+# 継承リストが折り返された場合、コロンの前で折り返します。
 BreakInheritanceList: BeforeComma
-#
+# 文字リテラルを折り返すことを許可します。
 BreakStringLiterals: true
-#
+# 1行の文字の最大数は60文字です。
 ColumnLimit: 60
-#
+# コメントで'@'から始まる1行は折り返すことを許可しません。(Doxygenコードのため)
 CommentPragmas: ^@
-#
+# 連続した名前空間を1行にまとめません。
 CompactNamespaces: false
-#
+# 初期化子リストのインデントは4です。
 ConstructorInitializerIndentWidth: 4
-#
+# 文の途中で改行した際のインデントは4です。
 ContinuationIndentWidth: 4
-#
+# 初期化子の波括弧の前後に空白を入れません。
 Cpp11BracedListStyle: false
-#
+# 改行コードは自動的に判断されます。
 DeriveLineEnding: true
-#
+# 参照、ポインタが何方寄りか自動で判断します。
 DerivePointerAlignment: true
-#
+# フォーマットは有効です。
 DisableFormat: false
 # アクセス修飾子の下は1行開けません。
 EmptyLineAfterAccessModifier: Never
 # アクセス修飾子の上に1行追加します。
 EmptyLineBeforeAccessModifier: Always
-#
+# 名前空間の末尾にコメントを挿入しません。
 FixNamespaceComments: false
-#
+# インクルードをブロックごとにソートします。
 IncludeBlocks: Preserve
-#
+# アクセス修飾子自体にインデントはありません
 IndentAccessModifiers: false
-#
+# caseのブロックはcaseと同じインデントが挿入されます。
 IndentCaseBlocks: true
-#
+# caseのラベルにインデントは挿入しません。
 IndentCaseLabels: false
-#
+# externのブロックはインデントが挿入されます。
 IndentExternBlock: AfterExternBlock
-#
+# gotoのラベルはインデントが挿入されません。
 IndentGotoLabels: false
-#
+# プリプロセッサディレクティブはインデントが挿入されません。
 IndentPPDirectives: None
-#
+# request句はインデントが挿入されません。(C++20拡張時に適用されます。)
 IndentRequires: false
-#
+# インデントは空白4つです。
 IndentWidth: 4
-#
+# 関数の宣言や変数の宣言の途中で折り返された場合、インデントされません。
 IndentWrappedFunctionNames: false
-#
+# ブロックの先頭の空行を何行まで保持するか設定します。
 KeepEmptyLinesAtTheStartOfBlocks: true
-#
+#　ラムダ式のブロックでインデントが挿入されます。
 LambdaBodyIndentation: Signature
-#
+# 対象言語はC++です。
 Language: Cpp
-#
+# ブロックの先頭の空行は保持させません。
 MaxEmptyLinesToKeep: 0
-#
+# 名前空間のブロックはインデントが挿入されます。
 NamespaceIndentation: All
-#
+# プリプロセッサディレクティブはインデントが挿入されません。
 PPIndentWidth: 0
-#
+# 初期化子リストは1行にできるだけ収め、できない場合は1行に1つづつ配置します。
 PackConstructorInitializers: NextLine
-#
+# 折り返したい場合、代入演算子の前後での折り返しは推奨されます。
 PenaltyBreakAssignment: 0
-#
+# 折り返したい場合、関数呼び出しの開始括弧の後での折り返しは推奨されません。
 PenaltyBreakBeforeFirstCallParameter: 10
-#
+# 折り返したい場合、コメント内での折り返しは推奨されません。
 PenaltyBreakComment: 10
-#
+# 折り返したい場合、左シフトの前での折り返しは推奨されません。
 PenaltyBreakFirstLessLess: 10
-#
+# 折り返したい場合、文字リテラル内での折り返しは推奨されません。
 PenaltyBreakString: 10
-#
+# 折り返したい場合、テンプレートの後での折り返しは推奨されます。
 PenaltyBreakTemplateDeclaration: 0
-#
+# 最大行数を1文字はみ出すごとに1ペナリティ加算されます。
 PenaltyExcessCharacter: 1
-#
+# インデント空白文字も1文字はみ出すごとに1ペナリティです。
 PenaltyIndentedWhitespace: 1
-#
+# 関数の戻り値を同じ行に配置することは推奨されます。
 PenaltyReturnTypeOnItsOwnLine: 0
-#
+# ポインタは右寄せです。
 PointerAlignment: Right
-#
+# 参照はポインタと同じく寄せます。
 ReferenceAlignment: Pointer
-#
+# コメントは折り返されません。
 ReflowComments: false
-#
+# 30行以下の名前空間は短いと判断されます。
 ShortNamespaceLines: 30
-#
+# インクルードのソートは大文字小文字を考慮してソートされます。
 SortIncludes: CaseSensitive
 #
 SortUsingDeclarations: true
