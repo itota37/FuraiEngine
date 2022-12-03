@@ -1,0 +1,32 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Test Build",
+            "type": "shell",
+            "command": "${workspaceFolder}/../../Editor/Build/Windows/LLVM/bin/clang.exe",
+            "args": [
+                "-std=c++17",
+                "-g",
+                // マクロ設定です。
+                "-D",
+                "FURAIENGINE_TEST=1",
+                // インクルードディレクトリです。
+                "-I",
+                "${workspaceFolder}/include",
+                // ビルド対象です。
+                "${workspaceFolder}/src/*.cpp",
+                // 出力先です。
+                "-o",
+                "${workspaceFolder}/bin/Test.exe",
+            ],
+            "group":{
+                // Ctrl + Shift + B で実行できます。
+                "kind": "build",
+                "isDefault": true
+              }
+        }
+    ]
+}

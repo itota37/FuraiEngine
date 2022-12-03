@@ -4,28 +4,90 @@
 /// 有用機能を提供します。
 #ifndef _FURAIENGINE_UTILITY_HPP
 #define _FURAIENGINE_UTILITY_HPP
+#include <typeinfo>
 #include "FuraiEngine/Primitive.hpp"
 /// FuraiEngineのすべての機能を含む名前空間です。
 namespace FuraiEngine
 {
+    /// @cond FURAIDOC_INTERNAL
+    /// 非公開機能を含む名前空間です。
+    namespace _Internal
+    {
+        /// ログ用ラベルです。
+        static const Char *LOG_LABEL = TXT("LOG");
+
+        /// 警告用ラベルです。
+        static const Char *WARNING_LABEL = TXT("WARNING");
+
+        /// エラー用ラベルです。
+        static const Char *ERROR_LABEL = TXT("ERROR");
+
+        /// ロガーです。
+        class Logger {
+        public:
+            /// 初期化します。
+            /// @param label メッセージのカテゴリラベルです。
+            /// @warning 同スレッド内でインスタンス解放前にもう1つインスタンス化するとデッドロックが発生します。
+            Logger(const Char *label) noexcept;
+
+            /// ムーブします。
+            /// @param origin ムーブ元です。
+            Logger(Logger &&origin) noexcept;
+
+            /// 解体します。
+            ~Logger() noexcept;
+
+            /// メッセージを追加します。
+            /// @param message メッセージです。
+            /// @return 自身のインスタンスです。
+            Logger &&Wright(const Char *message) noexcept;
+        };
+    }
+    /// @endcode
+
     /// ログを出力します。
     /// @param message 出力メッセージです。
     void Log(const Char *message) noexcept;
+
     /// 警告を出力します。
     /// @param message 出力メッセージです。
     void LogWarning(const Char *message) noexcept;
+
     /// エラーを出力します。
     /// @param message 出力メッセージです。
     void LogError(const Char *message) noexcept;
+
+    /// 正常終了します。
+    [[noreturn]] inline void Exit() noexcept
+    {
+        std::exit(0);
+    }
+
+    /// 異常終了します。
+    [[noreturn]] inline void ExitError() noexcept
+    {
+        std::exit(-1);
+    }
+
+    /// 異常終了します。
+    /// @param message 出力メッセージです。
+    [[noreturn]] inline void ExitError(const Char *message) noexcept
+    {
+        LogError(message);
+        ExitError();
+    }
+
     /// ムーブします。
     /// @tparam T ムーブする型です。
     /// @param value ムーブする値です。
     /// @return ムーブする値です。
     template<typename T>
-    constexpr std::remove_reference<T>::type &&Move(T &&value) noexcept
+    constexpr typename std::remove_reference<T>::type &&
+    Move(T &&value) noexcept
     {
         return std::move(value);
     }
+
     /// 左辺値はコピー、右辺値はムーブします。
     /// @tparam T 適用する型です。
     /// @param value 適用する値です。
@@ -36,6 +98,7 @@ namespace FuraiEngine
     {
         return std::forward(value);
     }
+
     /// 左辺値はコピー、右辺値はムーブします。
     /// @tparam T 適用する型です。
     /// @param value 適用する値です。
@@ -46,11 +109,13 @@ namespace FuraiEngine
     {
         return std::forward(value);
     }
+
     /// 戻り値の成功、または、失敗を表現します。
     /// @tparam S 成功時の型です。
     /// @tparam F 失敗時の型です。
     template<typename S, typename F>
     class Result {
+
         union UValue
         {
             U8 m_ready; // 初期化を遅延させるための、ダミー値です。
@@ -62,15 +127,12 @@ namespace FuraiEngine
         } m_value;
         enum class EState : U8
         {
-            NONE,    // 値はダミー値です。
+            READY,   // 値はダミー値です。
             SUCCESS, // 値は成功値です。
             FAILUR   // 値は失敗値です。
         } m_state;   // 値の判別値です。
 
     public:
-        /// 空で初期化します。
-        Result() noexcept: m_value(), m_state(EState::NONE)
-        {}
         /// 成功値で初期化します。
         /// @param value 成功値です。
         Result(S &&value) noexcept
@@ -78,6 +140,7 @@ namespace FuraiEngine
         {
             this->m_value.m_success = Move(value);
         }
+
         /// 失敗値で初期化します。
         /// @param value 失敗値です。
         Result(F &&value) noexcept
@@ -85,6 +148,7 @@ namespace FuraiEngine
         {
             this->m_value.m_failur = Move(value);
         }
+
         /// ムーブ代入します。
         /// @param origin ムーブ元です。
         /// @return 自身のインスタンスです。
@@ -101,12 +165,15 @@ namespace FuraiEngine
             }
             return *this;
         }
+
         /// ムーブします。
         /// @param origin ムーブ元です。
-        Result(Result<S, F> &&origin) noexcept: Result()
+        Result(Result<S, F> &&origin) noexcept
+            : m_value(), m_state(EState::READY)
         {
             *this = Move(origin);
         }
+
         /// 終了化します。
         ~Result()
         {
@@ -117,12 +184,14 @@ namespace FuraiEngine
             else if (this->m_state == EState::FAILUR) [[maybe_unused]]
                 F _tmp = Move(this->m_value.m_failur);
         }
+
         /// 成功か判定します。
         /// @return 成功判定値です。
         Bool IsSuccess() noexcept
         {
             return this->m_state == EState::SUCCESS;
         }
+
         /// 成功か判定します。
         /// @param value 成功値を受け取る参照です。
         /// @return 成功判定値です。
@@ -135,12 +204,49 @@ namespace FuraiEngine
             }
             return false;
         }
+
+        /// 成功か判定します。
+        /// @param success 成功値を受け取る参照です。
+        /// @param failur 失敗値を受け取る参照です。
+        /// @return 成功判定値です。
+        Bool IsSuccess(S &success, F &failur) noexcept
+        {
+            if (this->IsSuccess())
+            {
+                success = Move(this->m_value.m_success);
+                return true;
+            }
+            else if (this->IsFailur())
+            {
+                failur = Move(this->m_value.m_failur);
+                return false;
+            }
+            else
+            {
+                _Internal::Logger(_Internal::ERROR_LABEL)
+                    .Wright(TXT("移動された値にアクセスしよ"
+                                "うとしました。'"))
+                    .Wright(TXT("Result<"))
+                    .Wright(typeid(S).name())
+                    .Wright(TXT(", "))
+                    .Wright(typeid(F).name())
+                    .Wright(TXT(">::IsSuccess("))
+                    .Wright(typeid(S).name())
+                    .Wright(TXT(" &success, "))
+                    .Wright(typeid(F).name())
+                    .Wright(TXT(" &failur) noexcept'"));
+
+                ExitError();
+            }
+        }
+
         /// 失敗か判定します。
         /// @return 失敗判定値です。
         Bool IsFailur() noexcept
         {
             return this->m_state == EState::FAILUR;
         }
+
         /// 失敗か判定します。
         /// @param value 失敗値を受け取る参照です。
         /// @return 失敗判定値です。
@@ -154,22 +260,68 @@ namespace FuraiEngine
             return false;
         }
     };
-    /// 正常終了します。
-    [[noreturn]] inline void Exit() noexcept
-    {
-        std::exit(0);
-    }
-    /// 異常終了します。
-    [[noreturn]] inline void ExitError() noexcept
-    {
-        std::exit(-1);
-    }
-    /// 異常終了します。
-    /// @param message 出力メッセージです。
-    [[noreturn]] inline void ExitError(const Char *message) noexcept
-    {
-        LogError(message);
-        ExitError();
-    }
+
+    /// 成功を表現する型です。
+    class Success {
+    public:
+        /// 初期化します。
+        constexpr Success() noexcept
+        {}
+
+        /// コピーします。
+        constexpr Success(const Success &) noexcept
+        {}
+
+        /// ムーブします。
+        constexpr Success(Success &&) noexcept
+        {}
+
+        /// コピー代入します。
+        constexpr Success &operator=(const Success &) noexcept
+        {
+            return *this;
+        }
+
+        /// ムーブ代入します。
+        constexpr Success &operator=(Success &&) noexcept
+        {
+            return *this;
+        }
+    };
+
+    
+    /// 失敗を表現する型です。
+    class Failur {
+    public:
+        /// 初期化します。
+        constexpr Failur() noexcept
+        {}
+
+        /// コピーします。
+        constexpr Failur(const Failur &) noexcept
+        {}
+
+        /// ムーブします。
+        constexpr Failur(Failur &&) noexcept
+        {}
+
+        /// コピー代入します。
+        constexpr Failur &operator=(const Failur &) noexcept
+        {
+            return *this;
+        }
+
+        /// ムーブ代入します。
+        constexpr Failur &operator=(Failur &&) noexcept
+        {
+            return *this;
+        }
+    };
+
+    /// 成功値です。
+    constexpr Success SUCCESS = Success();
+
+    /// 失敗値です。
+    constexpr Failur FAILUR = Failur();
 }
 #endif // !_FURAIENGINE_UTILITY_HPP

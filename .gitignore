@@ -31,5 +31,17 @@
 *.out
 *.app
 
+# Debug files
+*.pdb
+
+# Link files
+*.ilk
+
+# Log files
+Log.txt
+
+# Setting files
+desktop.ini
+
 # Tools
 Editor/Build/Windows/LLVM/

@@ -90,8 +90,6 @@ EmptyLineAfterAccessModifier: Never
 EmptyLineBeforeAccessModifier: Always
 # 名前空間の末尾にコメントを挿入しません。
 FixNamespaceComments: false
-# インクルードをブロックごとにソートします。
-IncludeBlocks: Preserve
 # アクセス修飾子自体にインデントはありません
 IndentAccessModifiers: false
 # caseのブロックはcaseと同じインデントが挿入されます。
@@ -116,8 +114,8 @@ KeepEmptyLinesAtTheStartOfBlocks: true
 LambdaBodyIndentation: Signature
 # 対象言語はC++です。
 Language: Cpp
-# ブロックの先頭の空行は保持させません。
-MaxEmptyLinesToKeep: 0
+# ブロックの先頭の空行は1行まで保持されます。
+MaxEmptyLinesToKeep: 1
 # 名前空間のブロックはインデントが挿入されます。
 NamespaceIndentation: All
 # プリプロセッサディレクティブはインデントが挿入されません。
@@ -152,47 +150,47 @@ ReflowComments: false
 ShortNamespaceLines: 30
 # インクルードのソートは大文字小文字を考慮してソートされます。
 SortIncludes: CaseSensitive
-#
+# usingディレクティブはソートされます。
 SortUsingDeclarations: true
-#
+# Cスタイルのキャストの後ろにスペースを入れます。
 SpaceAfterCStyleCast: true
-#
+# 否定演算子の後ろに空白を入れません。
 SpaceAfterLogicalNot: false
-#
+# templateの後ろに空白を入れません。
 SpaceAfterTemplateKeyword: false
-#
+# ポインタの前後の空白はPointerAlignmentに従います。
 SpaceAroundPointerQualifiers: Default
-#
+# 代入演算子の前に空白を入れます。
 SpaceBeforeAssignmentOperators: true
-#
+# caseのコロンの前に空白を入れません。
 SpaceBeforeCaseColon: false
-#
+# 初期化しリストの前に空白を入れます。
 SpaceBeforeCpp11BracedList: true
-#
+# コンストラクタのメンバ初期化子のコロンの前に空白を入れません。
 SpaceBeforeCtorInitializerColon: false
-#
+# 継承のコロンの前に空白を入れません。
 SpaceBeforeInheritanceColon: false
-#
+# 制御構文の丸括弧の前後に空白を入れます。
 SpaceBeforeParens: ControlStatements
-#
+# 範囲forのコロンの前に空白を入れません。
 SpaceBeforeRangeBasedForLoopColon: false
-#
+# []の前に空白を入れません。
 SpaceBeforeSquareBrackets: false
-#
+# 空のブロックに空白を入れません。
 SpaceInEmptyBlock: false
-#
+# 空白の丸括弧に空白を入れません。
 SpaceInEmptyParentheses: false
-#
+# 末尾コメントの前に空白を1つ入れます。
 SpacesBeforeTrailingComments: 1
-#
+# テンプレート引数リストの<>と引数の間に空白を入れません。
 SpacesInAngles: Never
-#
+# Cスタイルのキャストの()と型の間に空白を入れません。
 SpacesInCStyleCastParentheses: false
-#
+# 制御構文の()と条件式の間に空白を入れません。
 SpacesInConditionalStatement: false
-#
+# 関数の()と引数の間に空白を入れません。
 SpacesInParentheses: false
-#
+# 配列の[]と定数の間に空白を入れません。
 SpacesInSquareBrackets: false
 # C++17用の設定
 Standard: c++17
@@ -202,9 +200,9 @@ TabWidth: 4
 UseCRLF: false
 # タブは常に空白に置換される
 UseTab: Never
-#
+# 波括弧の改行スタイルはBraceWrappingで個別に行います。
 BreakBeforeBraces: Custom
-#
+# 波括弧の改行スタイルです。
 BraceWrapping:
   # caseの後の波括弧は折り返します。
   AfterCaseLabel: true
@@ -240,3 +238,15 @@ BraceWrapping:
   SplitEmptyRecord: false
   # 空の名前空間の波括弧は1行にまとめます。
   SplitEmptyNamespace: false
+# インクルードはブロックを連結してソートします。
+IncludeBlocks: Merge
+# インクルードのソート規則です。
+IncludeCategories:
+  - Regex: '".*\..*"'
+    SortPriority: 3
+  - Regex: '".*"'
+    SortPriority: 4
+  - Regex: '<.*\..*>'
+    SortPriority: 2
+  - Regex: '<.*>'
+    SortPriority: 1
