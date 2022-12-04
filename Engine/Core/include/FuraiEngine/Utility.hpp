@@ -23,7 +23,8 @@ namespace FuraiEngine
         static const Char *ERROR_LABEL = TXT("ERROR");
 
         /// ロガーです。
-        class Logger {
+        class Logger
+        {
         public:
             /// 初期化します。
             /// @param label メッセージのカテゴリラベルです。
@@ -40,10 +41,18 @@ namespace FuraiEngine
             /// メッセージを追加します。
             /// @param message メッセージです。
             /// @return 自身のインスタンスです。
-            Logger &&Wright(const Char *message) noexcept;
+            Logger &&Write(const Char *message) noexcept;
         };
     }
     /// @endcode
+
+    /// 型名を取得します。
+    /// @tparam T 型名を取得したい型です。
+    template<typename T>
+    const Char *TypenameOf() noexcept
+    {
+        return typeid(T).name();
+    }
 
     /// ログを出力します。
     /// @param message 出力メッセージです。
@@ -114,7 +123,8 @@ namespace FuraiEngine
     /// @tparam S 成功時の型です。
     /// @tparam F 失敗時の型です。
     template<typename S, typename F>
-    class Result {
+    class Result
+    {
 
         union UValue
         {
@@ -209,6 +219,7 @@ namespace FuraiEngine
         /// @param success 成功値を受け取る参照です。
         /// @param failur 失敗値を受け取る参照です。
         /// @return 成功判定値です。
+        /// @warning 値の移動後に取り出そうとした場合、異常終了します。
         Bool IsSuccess(S &success, F &failur) noexcept
         {
             if (this->IsSuccess())
@@ -224,17 +235,17 @@ namespace FuraiEngine
             else
             {
                 _Internal::Logger(_Internal::ERROR_LABEL)
-                    .Wright(TXT("移動された値にアクセスしよ"
-                                "うとしました。'"))
-                    .Wright(TXT("Result<"))
-                    .Wright(typeid(S).name())
-                    .Wright(TXT(", "))
-                    .Wright(typeid(F).name())
-                    .Wright(TXT(">::IsSuccess("))
-                    .Wright(typeid(S).name())
-                    .Wright(TXT(" &success, "))
-                    .Wright(typeid(F).name())
-                    .Wright(TXT(" &failur) noexcept'"));
+                    .Write(TXT("移動された値にアクセスしよ"
+                               "うとしました。'"))
+                    .Write(TXT("Result<"))
+                    .Write(TypenameOf<S>())
+                    .Write(TXT(", "))
+                    .Write(TypenameOf<F>())
+                    .Write(TXT(">::IsSuccess("))
+                    .Write(TypenameOf<S>())
+                    .Write(TXT(" &success, "))
+                    .Write(TypenameOf<F>())
+                    .Write(TXT(" &failur) noexcept'"));
 
                 ExitError();
             }
@@ -262,7 +273,8 @@ namespace FuraiEngine
     };
 
     /// 成功を表現する型です。
-    class Success {
+    class Success
+    {
     public:
         /// 初期化します。
         constexpr Success() noexcept
@@ -289,9 +301,9 @@ namespace FuraiEngine
         }
     };
 
-    
     /// 失敗を表現する型です。
-    class Failur {
+    class Failur
+    {
     public:
         /// 初期化します。
         constexpr Failur() noexcept

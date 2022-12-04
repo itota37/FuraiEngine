@@ -207,7 +207,7 @@ BraceWrapping:
   # caseの後の波括弧は折り返します。
   AfterCaseLabel: true
   # クラス名の後の波括弧は折り返します。
-  AfterClass: false
+  AfterClass: true
   # 制御構文の後の波括弧は折り返します。
   AfterControlStatement: Always
   # 列挙体名の後の波括弧は折り返します。

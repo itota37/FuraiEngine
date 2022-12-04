@@ -96,7 +96,7 @@ FuraiEngine::_Internal::Logger::~Logger() noexcept
 // メッセージを追加します。
 // message メッセージです。
 // 自身のインスタンスです。
-Logger &&FuraiEngine::_Internal::Logger::Wright(const Char *message) noexcept
+Logger &&FuraiEngine::_Internal::Logger::Write(const Char *message) noexcept
 {
     if (g_pFile != nullptr)
         fprintf(g_pFile, "%s", message);
@@ -113,19 +113,19 @@ Logger &&FuraiEngine::_Internal::Logger::Wright(const Char *message) noexcept
 //message 出力メッセージです。
 void FuraiEngine::Log(const Char *message) noexcept
 {
-    Logger(LOG_LABEL).Wright(message);
+    Logger(LOG_LABEL).Write(message);
 }
 
 // 警告を出力します。
 // message 出力メッセージです。
 void FuraiEngine::LogWarning(const Char *message) noexcept
 {
-    Logger(WARNING_LABEL).Wright(message);
+    Logger(WARNING_LABEL).Write(message);
 }
 
 // エラーを出力します。
 // message 出力メッセージです。
 void FuraiEngine::LogError(const Char *message) noexcept
 {
-    Logger(ERROR_LABEL).Wright(message);
+    Logger(ERROR_LABEL).Write(message);
 }

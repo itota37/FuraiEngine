@@ -45,14 +45,15 @@ namespace FuraiEngine
     /// 標準アロケータ型です。
     /// @tparam T 要素の型です。
     template<typename T>
-    class Allocator {
+    class Allocator
+    {
     public:
         /// 要素の型です。
-        using Element = T;
+        using ElementType = T;
         /// メモリ確保エラー型です。
-        using BadAllocatedError = EBadAllocatedError;
+        using BadAllocatedErrorType = EBadAllocatedError;
         /// メモリ解放エラー型です。
-        using BadDeallocatedError = EBadDeallocatedError;
+        using BadDeallocatedErrorType = EBadDeallocatedError;
 
         /// 初期化します。
         constexpr Allocator() noexcept
@@ -81,17 +82,19 @@ namespace FuraiEngine
         /// メモリを確保します。
         /// @param size 確保する要素数です。
         /// @return 確保したメモリのポインタ、または、エラー値です。
-        Result<Element *, BadAllocatedError> Allocate(Usize count) noexcept
+        Result<ElementType *, BadAllocatedErrorType>
+        Allocate(Usize count) noexcept
         {
-            return (Element *) FuraiEngine::Allocate(sizeof(Element) * count);
+            return (ElementType *) FuraiEngine::Allocate(
+                sizeof(ElementType) * count);
         }
 
         /// メモリを解放します。
         /// @param pointer 解放するポインタです。
         /// @param count 解放する要素数です。
         /// @return 成功値、または、エラー値です。
-        Result<Success, BadAllocatedError>
-        Deallocate(Element *pointer, USize count) noexcept
+        Result<Success, BadAllocatedErrorType>
+        Deallocate(ElementType *pointer, USize count) noexcept
         {
             return FuraiEngine::Deallocate((void *) pointer, count);
         }
